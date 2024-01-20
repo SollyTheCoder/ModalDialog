@@ -1,30 +1,38 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
+import { useEffect, useState } from "react";
 import "./App.css";
+import Modal, { ModalContent } from "./components/Modal";
 import ModalLauncher from "./components/ModalLauncher";
-import Modal, { ModalProps } from "./components/Modal";
-import { createPortal } from "react-dom";
+import {
+  articleModalContent,
+  dismissModalContent,
+  everythingModalContent,
+  simpleModalContent,
+} from "./constants/modalContent";
 
 function App() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [modalProps, setModalProps] = useState<ModalProps>({
+  const [modalContent, setModalContent] = useState<ModalContent>({
     title: "Test",
     content: <></>,
     buttons: [],
-    closeModal: onModalClose,
   });
 
-  function onModalLauncherClick() {
-    // setModalProps((oldModalProps) => {
-    //   return { ...oldModalProps};
-    // });
+  function onModalLaunch(modalContent: ModalContent) {
+    setModalContent(modalContent);
     setModalVisible(true);
   }
 
   function onModalClose() {
-    console.log("onModalClose");
     setModalVisible(false);
   }
+
+  useEffect(() => {
+    onModalLaunch({
+      title: "App Launch",
+      content: <p>Application has been successfully launched</p>,
+      buttons: [],
+    });
+  }, []);
 
   return (
     <>
@@ -33,7 +41,7 @@ function App() {
           <h1 className="text-5xl font-thin">Welcome to Dialog Modal</h1>
           <p className="font-extralight">
             Dialog modal is used for presenting users with custom modals
-            containing valuable information - modal visible
+            containing valuable information - modal visible:
             {modalVisible.toString()}
           </p>
         </div>
@@ -41,30 +49,70 @@ function App() {
           <ModalLauncher
             colour={"red"}
             title={"Simple Modal"}
-            onClickEvent={() => onModalLauncherClick()}
+            onClickEvent={() =>
+              onModalLaunch({
+                title: "Simple Modal",
+                content: simpleModalContent,
+                buttons: [],
+              })
+            }
           />
           <ModalLauncher
             colour={"amber"}
             title={"Dismiss Modal"}
-            onClickEvent={() => onModalLauncherClick()}
+            onClickEvent={() =>
+              onModalLaunch({
+                title: "Dismiss Modal",
+                content: dismissModalContent,
+                buttons: [{ name: "dismiss", callback: onModalClose }],
+              })
+            }
           />
           <ModalLauncher
             colour={"lime"}
-            title={"Content Modal"}
-            onClickEvent={() => onModalLauncherClick()}
+            title={"Article Modal"}
+            onClickEvent={() =>
+              onModalLaunch({
+                title: "Article Modal",
+                content: articleModalContent,
+                buttons: [],
+              })
+            }
           />
           <ModalLauncher
             colour={"cyan"}
-            title={"Fun Modal"}
-            onClickEvent={() => onModalLauncherClick()}
+            title={"Everything Modal"}
+            onClickEvent={() =>
+              onModalLaunch({
+                title: "Everything Modal",
+                content: everythingModalContent,
+                buttons: [
+                  { name: "dismiss", callback: onModalClose },
+                  {
+                    name: "Add Button",
+                    callback: () => {
+                      setModalContent((prev) => {
+                        return {
+                          ...prev,
+                          buttons: [
+                            ...prev.buttons,
+                            { name: "New Button", callback: () => {} },
+                          ],
+                        };
+                      });
+                    },
+                  },
+                ],
+              })
+            }
           />
         </div>
       </div>
       {modalVisible && (
         <Modal
-          title={modalProps.title}
-          content={modalProps.content}
-          buttons={[]}
+          title={modalContent.title}
+          content={modalContent.content}
+          buttons={modalContent.buttons}
           closeModal={() => onModalClose()}
         />
       )}
