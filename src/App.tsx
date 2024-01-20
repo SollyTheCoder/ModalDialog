@@ -12,7 +12,7 @@ import {
 function App() {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<ModalContent>({
-    title: "Test",
+    title: "",
     content: <></>,
     buttons: [],
   });
