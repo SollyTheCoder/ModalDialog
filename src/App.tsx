@@ -38,9 +38,9 @@ function App() {
     <>
       <div className="mx-auto text-center min-h-screen py-10 px-40 bg-zinc-300">
         <div className="mx-auto my-10 w-full text-center">
-          <h1 className="text-5xl font-thin">Welcome to Dialog Modal</h1>
+          <h1 className="text-5xl font-thin">Welcome to Modal Dialog</h1>
           <p className="font-extralight">
-            Dialog modal is used for presenting users with custom modals
+            Modal dialog is used for presenting users with custom modals
             containing valuable information - modal visible:
             {modalVisible.toString()}
           </p>
